@@ -26,6 +26,7 @@ Database::getConnection()->query("SET NAMES 'utf8'");
 <a href="index.php">Powrót do menu głównego</a>
 <br>
 <br>
+<a href="admin_panel.php">Panel administratora</a>
 <br>
 <br>
 <?php
