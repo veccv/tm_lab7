@@ -29,7 +29,29 @@ Database::getConnection()->query("SET NAMES 'utf8'");
 <br>
 <br>
 <?php
+echo "Stwórz nowy temat " . '<span class="glyphicon glyphicon-plus" aria-hidden="true"></span><br><br>';
+echo "Tematy forum: <br><br>";
 
+$topics = mysqli_fetch_all(Database::getConnection()->query("SELECT * FROM topic"));
+echo '<table class="table table-bordered table-striped">';
+echo '<thead>';
+echo '<tr>';
+echo '<th>Opcje</th>';
+echo '<th>Temat</th>';
+echo '<th>Autor</th>';
+echo '</tr>';
+echo '</thead>';
+echo '<tbody>';
+foreach ($topics as $topic) {
+    echo '<tr>';
+    echo '<td></td>';
+    echo '<td>' . $topic[1] . '</td>';
+    echo '<td>' . $topic[2] . '</td>';
+    echo '</tr>';
+}
+
+echo '</tbody>';
+echo '</table>';
 ?>
 </BODY>
 </HTML>
