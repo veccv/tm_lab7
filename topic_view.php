@@ -15,19 +15,19 @@ if (!Database::getConnection()) {
 Database::getConnection()->query("SET NAMES 'utf8'");
 ?>
 
-    <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl" lang="pl">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    </head>
-    <BODY style="padding: 15px">
-    <a href="logout.php">Wyloguj się</a>
-    <br>
-    <a href="index.php">Powrót do menu głównego</a>
-    <br>
-    <br>
-    <br>
-    <br>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl" lang="pl">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<BODY style="padding: 15px">
+<a href="logout.php">Wyloguj się</a>
+<br>
+<a href="index.php">Powrót do menu głównego</a>
+<br>
+<br>
+<br>
+<br>
 <?php
 $topic_id = $_GET['id'];
 $topic_name = mysqli_fetch_array(Database::getConnection()->query("SELECT * FROM topic WHERE id='$topic_id'"))[1];
@@ -48,7 +48,10 @@ echo '</thead>';
 echo '<tbody>';
 foreach ($threads as $thread) {
     echo '<tr>';
-    echo '<td></td>';
+    echo '<td>';
+    echo '<a href="remove_thread.php?id=' . $thread[0] . '&topic=' . $topic_id . '"><i class="glyphicon glyphicon-trash fa-6x"></i></a>';
+    echo '</td>';
+
     echo '<td><a href="thread_view.php?id=' . $thread[0] . '">' . $thread[1] . '</a></td > ';
     echo '<td > ' . mysqli_fetch_array(Database::getConnection()->query("SELECT * FROM user WHERE id='$thread[2]'"))[1] . ' </td > ';
     echo '</tr > ';
