@@ -29,24 +29,28 @@ Database::getConnection()->query("SET NAMES 'utf8'");
 <br>
 <br>
 <?php
-echo "Stwórz nowy temat " . '<a href="add_topic.php"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a><br><br>';
-echo "Tematy forum: <br><br>";
+$topic_id = $_GET['id'];
+$topic_name = mysqli_fetch_array(Database::getConnection()->query("SELECT * FROM topic WHERE id='$topic_id'"))[1];
 
-$topics = mysqli_fetch_all(Database::getConnection()->query("SELECT * FROM topic"));
+echo "Stwórz nowy wątek " . '<a href="add_thread.php?id='. $topic_id .'"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a><br>';
+echo '<a href="index4.php">Powrót do strony głównej forum</a><br><br>';
+echo "Wątki do tematu --> " . $topic_name . " <br><br>";
+
+$threads = mysqli_fetch_all(Database::getConnection()->query("SELECT * FROM thread"));
 echo '<table class="table table-bordered table-striped">';
 echo '<thead>';
 echo '<tr>';
 echo '<th>Opcje</th>';
-echo '<th>Temat</th>';
+echo '<th>Wątek</th>';
 echo '<th>Autor</th>';
 echo '</tr>';
 echo '</thead>';
 echo '<tbody>';
-foreach ($topics as $topic) {
+foreach ($threads as $thread) {
     echo '<tr>';
     echo '<td></td>';
-    echo '<td><a href="topic_view.php?id= ' . $topic[0] . '"> ' . $topic[1] . '</a></td>';
-    echo '<td>' . mysqli_fetch_array(Database::getConnection()->query("SELECT * FROM user WHERE id='$topic[2]'"))[1] . '</td>';
+    echo '<td>' . $thread[1] . '</td>';
+    echo '<td>' . mysqli_fetch_array(Database::getConnection()->query("SELECT * FROM user WHERE id='$thread[2]'"))[1] . '</td>';
     echo '</tr>';
 }
 
