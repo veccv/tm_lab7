@@ -35,7 +35,7 @@ $thread_name = mysqli_fetch_array(Database::getConnection()->query("SELECT * FRO
 echo '<a href="index4.php">Powrót do strony głównej forum</a><br><br>';
 echo "Widok wątku --> " . $thread_name . " <br><br>";
 
-$threads = mysqli_fetch_all(Database::getConnection()->query("SELECT * FROM post WHERE thread_id='$thread_id'"));
+$threads = mysqli_fetch_all(Database::getConnection()->query("SELECT * FROM post WHERE thread_id='$thread_id' ORDER BY datetime asc"));
 echo '<table class="table table-bordered table-striped">';
 echo '<thead>';
 echo '<tr>';
