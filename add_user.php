@@ -19,7 +19,7 @@ $rekord = mysqli_fetch_array(Database::getConnection()->query("SELECT * FROM use
 if (!$rekord)
 {
     if ($pass == $pass_repeat) {
-        Database::getConnection()->query("INSERT INTO user (login, password) VALUES ('$user', '$pass')");
+        Database::getConnection()->query("INSERT INTO user (login, password, role) VALUES ('$user', '$pass', 'user')");
         Database::getConnection()->close();
         echo "Zarejestrowano użytkownika $user z hasłem $pass";
 
