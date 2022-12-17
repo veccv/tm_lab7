@@ -36,7 +36,7 @@ echo "Stwórz nowy wątek " . '<a href="add_thread.php?id='. $topic_id .'"><span
 echo '<a href="index4.php">Powrót do strony głównej forum</a><br><br>';
 echo "Wątki do tematu --> " . $topic_name . " <br><br>";
 
-$threads = mysqli_fetch_all(Database::getConnection()->query("SELECT * FROM thread"));
+$threads = mysqli_fetch_all(Database::getConnection()->query("SELECT * FROM thread WHERE topic_id='$topic_id'"));
 echo '<table class="table table-bordered table-striped">';
 echo '<thead>';
 echo '<tr>';
