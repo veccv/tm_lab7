@@ -4,6 +4,10 @@
 <form action="insert_post_to_db.php" method="post" enctype="multipart/form-data">
     <label for="message">Treść postu: </label>
     <input type="text" id="title" size="100" name="message"/>
+    <br>
+    <br>
+    Select file to upload:
+    <input type="file" name="fileToUpload" id="fileToUpload">
     <?php
     $thread_id = $_GET['id'];
     echo "<input type='hidden' name='thread_id' value='$thread_id' />"
