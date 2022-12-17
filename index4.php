@@ -49,13 +49,12 @@ foreach ($topics as $topic) {
     echo '<a href="remove_topic.php?id=' . $topic[0] . '"><i class="glyphicon glyphicon-trash fa-6x"></i></a>';
     echo '</td>';
     echo '<td><a href="topic_view.php?id= ' . $topic[0] . '"> ' . $topic[1] . '</a></td>';
-    echo '<td>' . mysqli_fetch_array(Database::getConnection()->query("SELECT * FROM user WHERE id='$topic[2]'"))[1] . '</td>';
+    echo '<td><a href="user_view.php?id=' . $topic[2] . '">' . mysqli_fetch_array(Database::getConnection()->query("SELECT * FROM user WHERE id='$topic[2]'"))[1] . '</a></td>';
     echo '</tr>';
 }
 
 echo '</tbody>';
 echo '</table>';
-
 ?>
 </BODY>
 </HTML>

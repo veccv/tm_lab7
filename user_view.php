@@ -1,20 +1,3 @@
-<?php declare(strict_types=1);
-session_start();
-
-if (!isset($_SESSION['loggedin'])) {
-    header('Location: index3.php');
-    exit();
-}
-
-$user = $_SESSION['user'];
-
-include 'Database.php';
-if (!Database::getConnection()) {
-    echo "Błąd: " . mysqli_connect_errno() . " " . mysqli_connect_error();
-}
-Database::getConnection()->query("SET NAMES 'utf8'");
-?>
-
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="pl" lang="pl">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -26,16 +9,45 @@ Database::getConnection()->query("SET NAMES 'utf8'");
 <a href="index.php">Powrót do menu głównego</a>
 <br>
 <br>
+<a href="index4.php">Powrót do forum</a>
+<br>
+<a href="">Wyślij komunikat do użytkownika</a>
 <br>
 <br>
+<br>
+Tematy użytkownika:
 <?php
-$thread_id = $_GET['id'];
-$thread_name = mysqli_fetch_array(Database::getConnection()->query("SELECT * FROM thread WHERE id='$thread_id'"))[1];
+include "Database.php";
+$user_id = $_GET['id'];
+$topics = mysqli_fetch_all(Database::getConnection()->query("SELECT * FROM topic WHERE user_id='$user_id'"));
+echo '<table class="table table-bordered table-striped">';
+echo '<thead>';
+echo '<tr>';
+echo '<th>Opcje</th>';
+echo '<th>Temat</th>';
+echo '<th>Autor</th>';
+echo '</tr>';
+echo '</thead>';
+echo '<tbody>';
+foreach ($topics as $topic) {
+    echo '<tr>';
+    echo '<td>';
+    echo '<a href="remove_topic.php?id=' . $topic[0] . '"><i class="glyphicon glyphicon-trash fa-6x"></i></a>';
+    echo '</td>';
+    echo '<td><a href="topic_view.php?id= ' . $topic[0] . '"> ' . $topic[1] . '</a></td>';
+    echo '<td><a href="user_view.php?id=' . $topic[2] . '">' . mysqli_fetch_array(Database::getConnection()->query("SELECT * FROM user WHERE id='$topic[2]'"))[1] . '</a></td>';
+    echo '</tr>';
+}
 
-echo '<a href="index4.php">Powrót do strony głównej forum</a><br><br>';
-echo "Widok wątku --> " . $thread_name . " <br><br>";
+echo '</tbody>';
+echo '</table>';
 
-$threads = mysqli_fetch_all(Database::getConnection()->query("SELECT * FROM post WHERE thread_id='$thread_id' ORDER BY datetime asc"));
+?>
+<br>
+<br>
+Posty użytkownika:
+<?php
+$threads = mysqli_fetch_all(Database::getConnection()->query("SELECT * FROM post WHERE user_id='$user_id' ORDER BY datetime asc"));
 echo '<table class="table table-bordered table-striped">';
 echo '<thead>';
 echo '<tr>';
@@ -46,8 +58,7 @@ echo '</thead>';
 echo '<tbody>';
 foreach ($threads as $thread) {
     echo '<tr>';
-    echo '<td>Autor postu: <a href="user_view.php?id=' . $thread[2] . '">' . mysqli_fetch_array(Database::getConnection()->query("SELECT * FROM user WHERE id='$thread[2]'"))[1] . '</a><br><br><br>';
-    echo '<a href="remove_post.php?id=' . $thread[0] . '&th=' . $thread_id . '"> <i class="glyphicon glyphicon-trash fa-6x"></i></a> Usuń ten post';
+    echo '<td>Autor postu: ' . mysqli_fetch_array(Database::getConnection()->query("SELECT * FROM user WHERE id='$thread[2]'"))[1] . '<br><br><br>';
     echo '</td>';
     if (strlen($thread[5]) > 0) {
         echo '<td>';
@@ -76,12 +87,9 @@ foreach ($threads as $thread) {
 
     echo '</tr>';
 }
-echo '<tr>';
-echo '<td colspan="2"><a href="add_post.php?id=' . $thread_id . '">Dodaj post</a></td>';
-echo '</tr>';
 
 echo '</tbody>';
 echo '</table>';
 ?>
 </BODY>
-</HTML>
+</html>
