@@ -32,7 +32,10 @@ Database::getConnection()->query("SET NAMES 'utf8'");
 $topic_id = $_GET['id'];
 $topic_name = mysqli_fetch_array(Database::getConnection()->query("SELECT * FROM topic WHERE id='$topic_id'"))[1];
 
-echo "Stwórz nowy wątek " . '<a href="add_thread.php?id=' . $topic_id . '"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a><br>';
+$role = mysqli_fetch_array(Database::getConnection()->query("SELECT * FROM user WHERE login='$user'"))[3];
+if ($role != 'blocked') {
+    echo "Stwórz nowy wątek " . '<a href="add_thread.php?id=' . $topic_id . '"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a><br>';
+}
 echo '<a href="index4.php">Powrót do strony głównej forum</a><br><br>';
 echo "Wątki do tematu --> " . $topic_name . " <br><br>";
 
@@ -49,7 +52,13 @@ echo '<tbody>';
 foreach ($threads as $thread) {
     echo '<tr>';
     echo '<td>';
-    echo '<a href="remove_thread.php?id=' . $thread[0] . '&topic=' . $topic_id . '"><i class="glyphicon glyphicon-trash fa-6x"></i></a>';
+    if ($role != 'blocked') {
+        if (mysqli_fetch_array(Database::getConnection()->query("SELECT * FROM user WHERE id='$thread[2]'"))[1] == $user) {
+            echo '<a href="remove_thread.php?id=' . $thread[0] . '&topic=' . $topic_id . '"><i class="glyphicon glyphicon-trash fa-6x"></i></a>';
+        }
+    } else {
+        echo 'Jesteś zablokowany, nie możesz usuwać swoich wątków.';
+    }
     echo '</td>';
 
     echo '<td><a href="thread_view.php?id=' . $thread[0] . '">' . $thread[1] . '</a></td > ';

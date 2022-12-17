@@ -26,7 +26,12 @@ Database::getConnection()->query("SET NAMES 'utf8'");
 <a href="index.php">Powrót do menu głównego</a>
 <br>
 <br>
-<a href="admin_panel.php">Panel administratora</a>
+<?php
+$role = mysqli_fetch_array(Database::getConnection()->query("SELECT * FROM user WHERE login='$user'"))[3];
+if ($role == "admin") {
+    echo '<a href="admin_panel.php">Panel administratora</a>';
+}
+?>
 <br>
 <br>
 Komunikaty:
@@ -59,26 +64,38 @@ echo '</table>';
 <br>
 <br>
 <?php
-echo "Stwórz nowy temat " . '<a href="add_topic.php"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a><br><br>';
+if ($role != 'blocked') {
+    echo "Stwórz nowy temat " . '<a href="add_topic.php"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a><br><br>';
+}
 echo "Tematy forum: <br><br>";
 
 $topics = mysqli_fetch_all(Database::getConnection()->query("SELECT * FROM topic"));
 echo '<table class="table table-bordered table-striped">';
 echo '<thead>';
 echo '<tr>';
-echo '<th>Opcje</th>';
-echo '<th>Temat</th>';
-echo '<th>Autor</th>';
+if ($role == "admin") {
+    echo '<th>Opcje</th>';
+    echo '<th>Temat</th>';
+    echo '<th>Autor</th>';
+} else {
+    echo '<th>Temat</th>';
+    echo '<th>Autor</th>';
+}
 echo '</tr>';
 echo '</thead>';
 echo '<tbody>';
 foreach ($topics as $topic) {
     echo '<tr>';
-    echo '<td>';
-    echo '<a href="remove_topic.php?id=' . $topic[0] . '"><i class="glyphicon glyphicon-trash fa-6x"></i></a>';
-    echo '</td>';
-    echo '<td><a href="topic_view.php?id= ' . $topic[0] . '"> ' . $topic[1] . '</a></td>';
-    echo '<td><a href="user_view.php?id=' . $topic[2] . '">' . mysqli_fetch_array(Database::getConnection()->query("SELECT * FROM user WHERE id='$topic[2]'"))[1] . '</a></td>';
+    if ($role == "admin") {
+        echo '<td>';
+        echo '<a href="remove_topic.php?id=' . $topic[0] . '"><i class="glyphicon glyphicon-trash fa-6x"></i></a>';
+        echo '</td>';
+        echo '<td><a href="topic_view.php?id= ' . $topic[0] . '"> ' . $topic[1] . '</a></td>';
+        echo '<td><a href="user_view.php?id=' . $topic[2] . '">' . mysqli_fetch_array(Database::getConnection()->query("SELECT * FROM user WHERE id='$topic[2]'"))[1] . '</a></td>';
+    } else {
+        echo '<td><a href="topic_view.php?id= ' . $topic[0] . '"> ' . $topic[1] . '</a></td>';
+        echo '<td><a href="user_view.php?id=' . $topic[2] . '">' . mysqli_fetch_array(Database::getConnection()->query("SELECT * FROM user WHERE id='$topic[2]'"))[1] . '</a></td>';
+    }
     echo '</tr>';
 }
 

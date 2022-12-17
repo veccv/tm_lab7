@@ -31,6 +31,7 @@ Database::getConnection()->query("SET NAMES 'utf8'");
 <?php
 $thread_id = $_GET['id'];
 $thread_name = mysqli_fetch_array(Database::getConnection()->query("SELECT * FROM thread WHERE id='$thread_id'"))[1];
+$role = mysqli_fetch_array(Database::getConnection()->query("SELECT * FROM user WHERE login='$user'"))[3];
 
 echo '<a href="index4.php">Powrót do strony głównej forum</a><br><br>';
 echo "Widok wątku --> " . $thread_name . " <br><br>";
@@ -47,7 +48,9 @@ echo '<tbody>';
 foreach ($threads as $thread) {
     echo '<tr>';
     echo '<td>Autor postu: <a href="user_view.php?id=' . $thread[2] . '">' . mysqli_fetch_array(Database::getConnection()->query("SELECT * FROM user WHERE id='$thread[2]'"))[1] . '</a><br><br><br>';
-    echo '<a href="remove_post.php?id=' . $thread[0] . '&th=' . $thread_id . '"> <i class="glyphicon glyphicon-trash fa-6x"></i></a> Usuń ten post';
+    if ($role != 'blocked' && mysqli_fetch_array(Database::getConnection()->query("SELECT * FROM user WHERE id='$thread[2]'"))[1] == $user) {
+        echo '<a href="remove_post.php?id=' . $thread[0] . '&th=' . $thread_id . '"> <i class="glyphicon glyphicon-trash fa-6x"></i></a> Usuń ten post';
+    }
     echo '</td>';
     if (strlen($thread[5]) > 0) {
         echo '<td>';
@@ -77,7 +80,11 @@ foreach ($threads as $thread) {
     echo '</tr>';
 }
 echo '<tr>';
-echo '<td colspan="2"><a href="add_post.php?id=' . $thread_id . '">Dodaj post</a></td>';
+if ($role == 'blocked') {
+    echo '<td colspan="2">Nie możesz dodawać ani usuwać swoich postów, jesteś zablokowany!</td>';
+} else {
+    echo '<td colspan="2"><a href="add_post.php?id=' . $thread_id . '">Dodaj post</a></td>';
+}
 echo '</tr>';
 
 echo '</tbody>';
