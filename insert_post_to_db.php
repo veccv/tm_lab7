@@ -14,6 +14,10 @@ if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
     echo "Error uploading file.";
 }
 
+if (strpos(strtolower($message), "cholera")) {
+    $message = "=== Wykryto brzydkie słowo w poście i został on zablokowany! ===";
+}
+
 $file_name = basename($_FILES["fileToUpload"]["name"]);
 Database::getConnection()->query("INSERT INTO post (message, user_id, thread_id, file) VALUES ('$message', '$user_id', '$thread_id', '$file_name')");
 Database::getConnection()->close();
