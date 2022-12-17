@@ -46,7 +46,9 @@ echo '</thead>';
 echo '<tbody>';
 foreach ($threads as $thread) {
     echo '<tr>';
-    echo '<td>Autor postu: ' . mysqli_fetch_array(Database::getConnection()->query("SELECT * FROM user WHERE id='$thread[2]'"))[1] . '</td>';
+    echo '<td>Autor postu: ' . mysqli_fetch_array(Database::getConnection()->query("SELECT * FROM user WHERE id='$thread[2]'"))[1] . '<br><br><br>';
+    echo '<a href="remove_post.php?id=' . $thread[0] . '&th=' . $thread_id . '"> <i class="glyphicon glyphicon-trash fa-6x"></i></a> Usuń ten post';
+    echo '</td>';
     if (strlen($thread[5]) > 0) {
         echo '<td>';
         echo $thread[1];
