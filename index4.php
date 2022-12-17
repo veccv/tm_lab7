@@ -29,6 +29,35 @@ Database::getConnection()->query("SET NAMES 'utf8'");
 <a href="admin_panel.php">Panel administratora</a>
 <br>
 <br>
+Komunikaty:
+<?php
+$user_id = mysqli_fetch_array(Database::getConnection()->query("SELECT * FROM user WHERE login='$user'"))[0];
+$alerts = mysqli_fetch_all(Database::getConnection()->query("SELECT * FROM alert WHERE receiver='$user_id' ORDER BY datetime ASC"));
+echo '<table class="table table-bordered table-striped">';
+echo '<thead>';
+echo '<tr>';
+echo '<th>Data wysłania</th>';
+echo '<th>Nadawca</th>';
+echo '<th>Treść komunikatu</th>';
+echo '</tr>';
+echo '</thead>';
+echo '<tbody>';
+foreach ($alerts as $alert) {
+    echo '<tr>';
+    echo '<td>';
+    echo $alert[4];
+    echo '</td>';
+    echo '<td>' . mysqli_fetch_array(Database::getConnection()->query("SELECT * FROM user WHERE id='$alert[1]'"))[1] . '</td>';
+    echo '<td>' . $alert[3] . '</td>';
+    echo '</tr>';
+}
+echo '</tbody>';
+echo '</table>';
+?>
+<br>
+<br>
+<br>
+<br>
 <?php
 echo "Stwórz nowy temat " . '<a href="add_topic.php"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></a><br><br>';
 echo "Tematy forum: <br><br>";

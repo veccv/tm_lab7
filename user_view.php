@@ -11,14 +11,16 @@
 <br>
 <a href="index4.php">Powrót do forum</a>
 <br>
-<a href="">Wyślij komunikat do użytkownika</a>
+<?php
+$user_id = $_GET['id'];
+echo '<a href="alert_form.php?id=' . $user_id . '">Wyślij komunikat do użytkownika</a>';
+?>
 <br>
 <br>
 <br>
 Tematy użytkownika:
 <?php
 include "Database.php";
-$user_id = $_GET['id'];
 $topics = mysqli_fetch_all(Database::getConnection()->query("SELECT * FROM topic WHERE user_id='$user_id'"));
 echo '<table class="table table-bordered table-striped">';
 echo '<thead>';
