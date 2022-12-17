@@ -10,5 +10,5 @@
 <br>
 <a href="index4.php">Logowanie</a>
 <br>
-<a href="index4.php">Wejście dla gościa</a>
+<a href="guest/index4.php">Wejście dla gościa</a>
 <br>
