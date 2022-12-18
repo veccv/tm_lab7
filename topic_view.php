@@ -53,7 +53,7 @@ foreach ($threads as $thread) {
     echo '<tr>';
     echo '<td>';
     if ($role != 'blocked') {
-        if (mysqli_fetch_array(Database::getConnection()->query("SELECT * FROM user WHERE id='$thread[2]'"))[1] == $user) {
+        if (mysqli_fetch_array(Database::getConnection()->query("SELECT * FROM user WHERE id='$thread[2]'"))[1] == $user || $user == 'admin') {
             echo '<a href="remove_thread.php?id=' . $thread[0] . '&topic=' . $topic_id . '"><i class="glyphicon glyphicon-trash fa-6x"></i></a>';
         }
     } else {
